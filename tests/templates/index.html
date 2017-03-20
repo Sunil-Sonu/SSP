@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Software Piracy Protection</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    {% load staticfiles %}
+    <link rel="stylesheet" href={% static 'css/bootstrap.css' %} >
+     <link rel="stylesheet" href={% static 'css/items.css' %} >
+     <link rel="stylesheet" href={% static 'css/animate.css' %} >
+
+    <style type="text/css">
+      h2{
+            margin: 30px 0;
+            padding: 0 200px 15px 0;
+            border-bottom: 1px solid #E5E5E5;
+        }
+        .bs-example{
+            margin: 20px;
+        }
+        #profile{
+
+        position: relative;
+            left:570px;
+        }
+
+        #logout{
+        position: relative;
+            left: 540px;
+        }
+        #searchbar {
+        position: relative;
+        top: 10px;
+            left:202px;
+    }
+    body{
+        background-color: snow;
+    }
+    header {
+    height: 400px;
+    background: url('http://www.ebuyer.com/blog/wp-content/uploads/2016/03/The-Real-Risks-of-Software-Piracy-title.png') center center no-repeat scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+</style>
+
+
+</head>
+<body>
+{% if user.is_authenticated %}
+    {% for content in data %}
+<div class="animated bounceInUp delay-30s">
+<div class="content">
+    <div class="feed-item card">
+      <div class="feed-header clearfix">
+           <span class="user-image left">
+          <img src={{ content.companylogo.url }} width="50px" />
+        </span>
+        <span class="user-name">{{content.seller}}</a>
+        </span>
+      </div>
+      <div class="feed-image">
+        <img src= '{{ content.productimage.url }}' />
+      </div>
+      <div class="feed-content">
+          <label class="label label-info" >Product Name :</label>
+            <span class="event-title">{{ content.name }}</span>
+          <label class="label label-info">Price: </label>
+            <span class="event-title">{{ content.price }}</span>
+            <span class="event-buy">
+                <a href="/homepage/categories/products/biddetails/{{ content.id }}" class="button blue right">View Details</a>
+            </span>
+      </div>
+    </div>
+</div>
+      {% endfor %}
+        </div>
+        </body>
+         <div class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+                  <p class="navbar-text pull-left">© 2016 - Website Designed by
+                       <a href="https://www.facebook.com/ImSunil7/" target="_blank" >Sunil Kumar</a>
+                  </p>
+            </div>
+        </div>
+{% else %}
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+               <a class="navbar-brand" href="/" style="position: relative;right:100px;">Software Piracy Protection</a>
+            </div>
+            <div class="collapse navbar-collapse" class="navbar-toggle"id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right" class="navbar-toggle" style="position: relative;left:90px;">
+                    <li>
+                        <a href="/login/">Login</a>
+                    </li>
+                    <li>
+                        <a href="/register/">Register</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+    <header class="business-header">
+        <div class="container">
+            <div class="row">
+                 <div class="col-lg-12"><br><br>
+                        <h1 class="tagline"></h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <h2>What We Do</h2>
+                <p>This is a website where you can purchase softwares and prevent the act of piracy. Here all the softwares are encrypted,</p>
+                <p>All you have to do is, Buy the software you want, run our program, which will automatically installs the software that you have purchased.</p>
+
+            </div>
+            <div class="col-sm-4">
+                <h2>Contact Us</h2>
+                <address>
+                    <abbr title="Email">Email:</abbr> <a href="mailto:#">spp_work@gmail.com</a>
+                </address>
+            </div>
+        </div>
+
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <span class="glyphicon glyphicon-search" style="font-size: 300px;"></span>
+                <h2>Search</h2>
+                <p>Every software is categorized in <strong>Categories</strong> so that it would easy for you to search for your desired softwares.</p>
+            </div>
+            <div class="col-sm-4">
+                <span class="glyphicon glyphicon-ok" style="font-size: 300px;"></span><h2>Interface</h2>
+                <p>You will have two tabs. One, where you can find all the products and the other where you check the maximum uses left. You will have a maximum of 3 different systems on which the software can be installed. That can be checked in the <strong>My Softwares</strong> tab.</p>
+            </div>
+            <div class="col-sm-4">
+
+                <span class="glyphicon glyphicon glyphicon-download" style="font-size: 300px;"></span><h2>Usage</h2>
+            <p>All that happens here is, once the software is purchased,it will be downloaded in the location specified, run that software to install your required application that you have purchased</p>
+            </div>
+        </div>
+
+        <hr>
+
+</div>
+    </form>
+<br/><br/><br/>
+<div class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+                  <p class="navbar-text pull-left">© 2016 - Website Designed by
+                       <a href="https://www.facebook.com/Ichigo.kurosaki079/" target="_blank" >Sunil Kumar</a>
+                  </p>
+            </div>
+        </div>
+</html>
+{% endif %}

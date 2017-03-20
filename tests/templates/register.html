@@ -1,0 +1,72 @@
+<html>
+  <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Software Piracy Protection</title>
+
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+          <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+      <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+        {% load staticfiles %}
+         <link rel="stylesheet" href={% static 'css/items.css' %}>
+         <link rel="stylesheet" href={% static 'css/animate.css' %}>
+         <link rel="stylesheet" href={% static 'css/login.css' %}>
+
+    </head>
+        {% if registered %}
+ <div class="jumbotron">
+      <div class="container">
+        <h1>Registration Successful !</h1>
+        <p>Thank you for registering in our website. If you have any issues, do leave a mail to this account<br/>
+            <strong> ssp_work@gmail.com </strong>
+        <p>Click here -><a href="/">Return to the homepage.</a></p>
+      </div>
+    </div>
+            </div>
+        {% else %}
+    <form enctype="multipart/form-data" id="user_form" method="post" action="/register/">
+     {% csrf_token %}
+          <div class="animated rollIn delay-30s">
+        <h1>Sign Up</h1>
+        <fieldset>
+          <legend><span class="number">1</span>Your basic info</legend>
+          <label for="name">Username:</label>
+            {{ user_form.username }}
+          <label for="mail">First Name:</label>
+          {{ user_form.first_name }}
+          <label for="password">Last Name:</label>
+            {{ user_form.last_name}}
+        <br><br>
+        <fieldset>
+          <legend><span class="number">2</span>Authenticated Information</legend>
+          <label for="bio">Email:</label>
+            {{ user_form.email }}
+            <label for="bio">Password:</label>
+            {{ user_form.password }}
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="number">3</span>Other Information</legend>
+            <label for="bio">Contact:</label>
+            {{ profile_form.contact }}
+        </fieldset>
+        <button type="submit">Sign Up</button>
+            <br>
+            <strong>Already A MEMBER?</strong>
+        <button formaction="/login/">Login</button>
+            {% endif %}
+   </fieldset>
+</div>
+    </form>
+             <div class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+                  <p class="navbar-text pull-left">© 2016 - Website Designed by
+                       <a href="https://www.facebook.com/Ichigo.kurosaki079/" target="_blank" >Sunil Kumar</a>
+                  </p>
+            </div>
+        </div>
+</html>

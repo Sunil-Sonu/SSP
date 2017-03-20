@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Softwares Recently Uploaded</h3>
+<hr/>
+{% for content in data %}
+
+<div class="animated fadeIn delay-30s">
+<div class="content">
+    <div class="feed-item card">
+      <div class="feed-header clearfix">
+        <span class="user-image left">
+          <img src={{ content.companylogo.url }} width="50px" />
+        </span>
+        <span class="user-name"><a href="" data-entity="person">{{content.seller}}</a>
+        </span>
+      </div>
+      <div class="feed-image">
+        <img src={{ content.productimage.url }}  />
+      </div>
+      <div class="feed-content">
+          <label class="label label-info" >Software Name :</label><span class="event-title">{{ content.name }}</span>
+    <label class="label label-info">Price: </label>      <span class="event-title">{{ content.price }}</span>
+        <span class="event-buy"><a href="/homepage/categories/products/{{ content.id }}" class="button blue right">View Details</a>
+    </span>
+      </div>
+</div>
+        </div>
+        </div>
+
+{% endfor %}
+{% endblock  %}

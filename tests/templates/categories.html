@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="animated bounceIn delay-40s">
+        <table class="table table-condensed table-hover">
+        	<thead>
+        		<tr>
+        			<th>List Of Categories</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+              {% for content in data %}
+    		<tr>
+                <td><a href="/homepage/categories/{{ content.id }}">{{ content.cname }}</a></td>
+    		</tr>
+        {% endfor %}
+        	</tbody>
+
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for content in data %}
+    <div class="animated rollIn delay-20s">
+    <div class="content">
+    <div class="feed-item card">
+      <div class="feed-header clearfix">
+        <span class="user-image left">
+          <img src={{ content.companylogo.url }} width="50px" />
+        </span>
+        <span class="user-name"><a href="" data-entity="person">{{content.seller}} <strong>(SELLER'S NAME)</strong></a>
+        </span>
+      </div>
+      <div class="feed-image">
+          <label class="label label-info" >Product Image:</label> <br/>
+        <img src={{ content.productimage.url }}/>
+      </div>
+
+      <div class="feed-content">
+          <label class="label label-info" >Software Name:</label><span class="event-title">{{ content.name }}</span>
+          <label class="label label-info" >Category: </label><span class="event-title">{{ content.list.cname }}</span>
+          <label class="label label-info">Desciption: </label>      <span class="event-title">{{ content.description }}</span>
+          <label class="label label-info" >Price: </label><span class="event-title">{{ content.price }}</span>
+          <hr style="border: none;height: 1px;background-color: #333;">
+<!--          <label class="label label-info" >Email: </label><span class="event-title">{{ content.current.user.email }}</span>
+-->
+          <span class="event-buy">
+              <form action="/homepage/categories/products/productpurchased/{{ content.id }}">
+             <button class="btn btn-primary" type="submit" onclick="isDownloading();" id = "downloading">PAY</button>
+                  </form>
+          </span>
+    </div>
+        </div>
+    </div>
+    {% endfor %}
+<script>
+    function isDownloading(){
+        console.log("testing");
+        var spinner = document.getElementById("downloading");
+        spinner.innerHTML = "Downloading...";
+    }
+
+</script>
+{% endblock %}
