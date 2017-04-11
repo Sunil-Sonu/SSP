@@ -22,8 +22,38 @@
       <div class="container">
         <h1>Registration Successful !</h1>
         <p>Thank you for registering in our website. If you have any issues, do leave a mail to this account<br/>
+        </p>
             <strong> ssp_work@gmail.com </strong>
-        <p>Click here -><a href="/">Return to the homepage.</a></p>
+        <script>
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        var end =setInterval(function () {
+            minutes = parseInt(timer / 60, 10)
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = seconds+" seconds";
+
+            if (--timer < 0) {
+                window.location = "http://127.0.0.1:8000";
+                clearInterval(end);
+            }
+        }, 1000);
+    }
+
+    window.onload = function () {
+        var fiveMinutes = 10,
+            display = document.querySelector('#time');
+        startTimer(fiveMinutes, display);
+    };
+</script>
+</head>
+<body>
+<div><b>You will be redirected to starting page in <span id="time">10 seconds</span></b></div>
+<form id="form1" runat="server">
+</form>
       </div>
     </div>
             </div>
@@ -65,7 +95,7 @@
              <div class="navbar navbar-default navbar-fixed-bottom">
             <div class="container">
                   <p class="navbar-text pull-left">© 2016 - Website Designed by
-                       <a href="https://www.facebook.com/Ichigo.kurosaki079/" target="_blank" >Sunil Kumar</a>
+                       <a href="https://www.facebook.com/ImSunil7/" target="_blank" >Sunil Kumar</a>
                   </p>
             </div>
         </div>
