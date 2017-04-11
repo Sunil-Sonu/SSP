@@ -1,9 +1,9 @@
-from django.http.response import HttpResponseRedirect,HttpResponse
+from django.http.response import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, render_to_response
 # Create your views here.
 from django.template.context import RequestContext
 
-from .forms import UserForm,UserProfileForm
+from .forms import UserForm, UserProfileForm
 from .models import *
 from django.contrib.auth import authenticate, login
 from django.template import loader
@@ -14,13 +14,12 @@ import urllib2
 
 @login_required
 def searchfile(request):
-    context=RequestContext(request)
-    search_query= request.POST['search_box']
-    info=Softwares.objects.all().filter(name__contains=search_query)
+    context = RequestContext(request)
+    search_query = request.POST['search_box']
+    info = Softwares.objects.all().filter(name__contains=search_query)
     context = {'data': info}
     template = loader.get_template('search.html')
     return HttpResponse(template.render(context, request))
-
 
 
 @login_required
@@ -35,114 +34,59 @@ def allsoftwares(request):
 @login_required
 def mysoftwares(request):
     context = RequestContext(request)
-    userid = request.user.id-1 #EXCLUDING SUPERUSER
+    userid = request.user.id - 1  # EXCLUDING SUPERUSER
     info = Purchases.objects.all().filter(curruser_id=userid).exclude(macid1="0")
     context = {'data': info}
     template = loader.get_template('mysoftwares.html')
     return HttpResponse(template.render(context, request))
 
+
 @login_required
-def macverficationdownload(request,pk):
-    def getFileType(str):
-        name = str.split('/')
-        l = len(name)
-        print name[l - 1]
-        return name[l - 1]
-
-    def setFileSize(int):
-        code.seek(file_size - 1)
-        code.write('\0')
-
-    context = RequestContext(request)
-    url = "https://raw.githubusercontent.com/Sunil-Sonu/Trail/master/application.zip";
-    filename = getFileType(url)
-    f = urllib2.urlopen(url)
-    meta = f.info()
-    file_size = int(meta.getheaders("Content-Length")[0])
-    # SETTING FILE PATH HERE
-    import os
-    filepath = os.path.join('C:\Users\Public\Downloads', filename)
-    if not os.path.exists('C:\Users\Public\Downloads'):
-        os.makedirs('C:\Users\Public\Downloads')
-    code = open(filepath, "wb")
-    setFileSize(file_size)
-    code.seek(0)
-    req = urllib2.Request(url, headers={'Range': 'bytes=' + str(file_size)})
-    data = urllib2.urlopen(req).read()
-    for i in data:
-        code.write(i)
-    code.close()
-
-    #CREATE AN OBJECT AND SAVE THESE DETAILS.
+def macverficationdownload(request, pk):
+    # CREATE AN OBJECT AND SAVE THESE DETAILS.
     software_object = Softwares.objects.get(pk=pk)
     category_id = software_object.list_id
     software_object.save()
-    category_object = Categories.objects.get(id= category_id)
+    category_object = Categories.objects.get(id=category_id)
     category_object.save()
-    user_object = UserProfile.objects.get(user_id= request.user.id)
+    user_object = UserProfile.objects.get(user_id=request.user.id)
     user_object.save()
-    data = Purchases(curruser=user_object,softwareinfo=software_object,categoryinfo=category_object,macid1="0",macid2="0",macid3="0",maccount=1)
-    data.save()
-    return render_to_response('productpurchased.html', {}, context)
+    info = Purchases.objects.all().filter(curruser_id=(request.user.id - 1))
+    if bool(info):
+        info.delete()
 
+    data = Purchases(curruser=user_object, softwareinfo=software_object, categoryinfo=category_object, macid1="0",
+                     macid2="0", macid3="0", maccount=1)
+    data.save()
+    return HttpResponseRedirect('https://raw.githubusercontent.com/Sunil-Sonu/Trail/master/application.zip', {})
 
 
 @login_required
-def softwarepurchased(request,pk):
+def softwarepurchased(request, pk):
     context = RequestContext(request)
     userid = request.user.id
     softwaredetails = Softwares.objects.get(id=pk)
-
-    import urllib2
-
-    def getFileType(str):
-        name = str.split('/')
-        l = len(name)
-        print name[l - 1]
-        return name[l - 1]
-
-    def setFileSize(int):
-        code.seek(file_size - 1)
-        code.write('\0')
-
     url = softwaredetails.link
-    filename = getFileType(url)
-    f = urllib2.urlopen(url)
-    meta = f.info()
-    file_size = int(meta.getheaders("Content-Length")[0])
-    # SETTING FILE PATH HERE
-    import os
-    filepath = os.path.join('C:\Users\Public\Downloads', filename)
-    if not os.path.exists('C:\Users\Public\Downloads'):
-        os.makedirs('C:\Users\Public\Downloads')
-    code = open(filepath, "wb")
-    setFileSize(file_size)
-    code.seek(0)
-    req = urllib2.Request(url, headers={'Range': 'bytes=' + str(file_size)})
-    data = urllib2.urlopen(req).read()
-
-    for i in data:
-        code.write(i)
-    code.close()
-    return render_to_response('productpurchased.html', {}, context)
+    return HttpResponseRedirect(url, {})
 
 
 @login_required
 def singleproduct(request, pk):
     context = RequestContext(request)
-    info = Softwares.objects.all().filter(id= pk)
-    context = { 'data' : info}
+    info = Softwares.objects.all().filter(id=pk)
+    context = {'data': info}
     template = loader.get_template('singleproduct.html')
-    return HttpResponse(template.render(context,request))
+    return HttpResponse(template.render(context, request))
 
 
 @login_required
-def products(request,pk):
+def products(request, pk):
     context = RequestContext(request)
-    info = Softwares.objects.all().filter(list_id= pk)
+    info = Softwares.objects.all().filter(list_id=pk)
     context = {'data': info}
     template = loader.get_template('products.html')
-    return HttpResponse(template.render(context,request))
+    return HttpResponse(template.render(context, request))
+
 
 @login_required
 def categories(request):
@@ -153,7 +97,6 @@ def categories(request):
     return HttpResponse(template.render(context, request))
 
 
-
 @login_required
 def homepage(request):
     context = RequestContext(request)
@@ -161,14 +104,17 @@ def homepage(request):
     context = {'data': info}
     template = loader.get_template('homepage.html')
     return HttpResponse(template.render(context, request))
+
+
 @login_required
 def searchitem(request):
-    context=RequestContext(request)
-    search_query= request.POST['search_box']
-    info=Softwares.objects.all().exclude(current_id=request.user.id).filter(pname__contains=search_query)
+    context = RequestContext(request)
+    search_query = request.POST['search_box']
+    info = Softwares.objects.all().exclude(current_id=request.user.id).filter(pname__contains=search_query)
     context = {'data': info}
     template = loader.get_template('search.html')
     return HttpResponse(template.render(context, request))
+
 
 def register(request):
     context = RequestContext(request)
@@ -230,8 +176,7 @@ def user_login(request):
 
 def index(request):
     context = RequestContext(request)
-    return render_to_response('index.html',{},context)
-
+    return render_to_response('index.html', {}, context)
 
 
 @login_required
