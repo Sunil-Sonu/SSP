@@ -9,6 +9,19 @@ from django.contrib.auth import authenticate, login
 from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+import urllib2
+
+
+@login_required
+def searchfile(request):
+    context=RequestContext(request)
+    search_query= request.POST['search_box']
+    info=Softwares.objects.all().filter(name__contains=search_query)
+    context = {'data': info}
+    template = loader.get_template('search.html')
+    return HttpResponse(template.render(context, request))
+
+
 
 @login_required
 def allsoftwares(request):
@@ -22,63 +35,64 @@ def allsoftwares(request):
 @login_required
 def mysoftwares(request):
     context = RequestContext(request)
-    userid = request.user.id
-    info = Purchases.objects.all().filter(curruser__user_id=userid)
+    userid = request.user.id-1 #EXCLUDING SUPERUSER
+    info = Purchases.objects.all().filter(curruser_id=userid).exclude(macid1="0")
     context = {'data': info}
     template = loader.get_template('mysoftwares.html')
     return HttpResponse(template.render(context, request))
 
 @login_required
+def macverficationdownload(request,pk):
+    def getFileType(str):
+        name = str.split('/')
+        l = len(name)
+        print name[l - 1]
+        return name[l - 1]
+
+    def setFileSize(int):
+        code.seek(file_size - 1)
+        code.write('\0')
+
+    context = RequestContext(request)
+    url = "https://raw.githubusercontent.com/Sunil-Sonu/Trail/master/application.zip";
+    filename = getFileType(url)
+    f = urllib2.urlopen(url)
+    meta = f.info()
+    file_size = int(meta.getheaders("Content-Length")[0])
+    # SETTING FILE PATH HERE
+    import os
+    filepath = os.path.join('C:\Users\Public\Downloads', filename)
+    if not os.path.exists('C:\Users\Public\Downloads'):
+        os.makedirs('C:\Users\Public\Downloads')
+    code = open(filepath, "wb")
+    setFileSize(file_size)
+    code.seek(0)
+    req = urllib2.Request(url, headers={'Range': 'bytes=' + str(file_size)})
+    data = urllib2.urlopen(req).read()
+    for i in data:
+        code.write(i)
+    code.close()
+
+    #CREATE AN OBJECT AND SAVE THESE DETAILS.
+    software_object = Softwares.objects.get(pk=pk)
+    category_id = software_object.list_id
+    software_object.save()
+    category_object = Categories.objects.get(id= category_id)
+    category_object.save()
+    user_object = UserProfile.objects.get(user_id= request.user.id)
+    user_object.save()
+    data = Purchases(curruser=user_object,softwareinfo=software_object,categoryinfo=category_object,macid1="0",macid2="0",macid3="0",maccount=1)
+    data.save()
+    return render_to_response('productpurchased.html', {}, context)
+
+
+
+@login_required
 def softwarepurchased(request,pk):
     context = RequestContext(request)
     userid = request.user.id
-    info = Purchases.objects.all().filter(curruser__user_id=userid, softwareinfo__id=pk )
-
     softwaredetails = Softwares.objects.get(id=pk)
 
-    userdetails = UserProfile.objects.filter(user_id= userid)
-
-    purchaseagain = False
-    # IF LIST IS NULL, THEN THE USER BROUGHT IT FOR THE FIRST TIME.
-    flag = False
-    olduser = False
-    newuser = False
-    if info:
-        #HE HAS ALREADY DOWNLOADED.
-        if info[0].maccount ==3:
-            # HE HAS PURCHASE IT AGAIN
-            info[0].maccount = 1
-            info[0].macid1 = "0"
-            info[0].macid2 = "0"
-            info[0].macid3 = "0"
-            olduser = True
-            purchaseagain = True
-    else:
-         newuser = True
-    #LOGIC TO GET THE MAC ADDRESS FROM HIS SYSTEM
-    import netifaces
-    mylist = netifaces.interfaces()
-    mydict = netifaces.ifaddresses(mylist[0])[netifaces.AF_LINK]
-    str1 = mydict[0].get('addr')
-    str2 = ""
-    for i in str1:
-            if i == ':':
-                str2 += '-'
-            else:
-                str2 += i
-    sysmac =  str2.upper()
-
-
-    if newuser:
-        softwaredetails.save()
-        userdetails[0].save()
-        software = Purchases(curruser= userdetails[0], softwareinfo= softwaredetails, macid1= sysmac, maccount= 1)
-        software.save()
-    if olduser:      # HE RE-PURCHASES THE SOFTWARE
-        info[0].macid1 = sysmac
-        info.save()
-
-    # NOW HERE WE PUT IN THE DOWNLOAD FILE LOGIC
     import urllib2
 
     def getFileType(str):
@@ -102,8 +116,6 @@ def softwarepurchased(request,pk):
     if not os.path.exists('C:\Users\Public\Downloads'):
         os.makedirs('C:\Users\Public\Downloads')
     code = open(filepath, "wb")
-
-
     setFileSize(file_size)
     code.seek(0)
     req = urllib2.Request(url, headers={'Range': 'bytes=' + str(file_size)})

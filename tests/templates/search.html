@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form>
+    {% if data %}
+    {% for content in data %}
+<div class="animated fadeIn delay-30s">
+<div class="content">
+    <div class="feed-item card">
+      <div class="feed-header clearfix">
+        <span class="user-image left">
+          <img src={{ content.companylogo.url }} width="50px" />
+        </span>
+        <span class="user-name"><a href="" data-entity="person">{{content.seller}}</a>
+        </span>
+      </div>
+      <div class="feed-image">
+        <img src={{ content.productimage.url }}  />
+      </div>
+      <div class="feed-content">
+          <label class="label label-info" >Software Name :</label><span class="event-title">{{ content.name }}</span>
+    <label class="label label-info">Price: </label>      <span class="event-title">{{ content.price }}</span>
+          <div></div>
+        <span class="event-buy"><a href="/homepage/categories/products/{{ content.id }}/downloadjar" class="button blue right">Download JAR</a>
+    </span>
+      </div>
+</div>
+        </div>
+        </div>
+    {% endfor %}
+    {% else %}
+<div class="alert alert-info fade in">
+    <div class="well" align="center">
+    <strong>PRODUCTS</strong> not avaiable Yet.
+  </div>
+    {% endif %}
+</form>
+{% endblock  %}

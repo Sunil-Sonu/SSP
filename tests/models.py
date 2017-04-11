@@ -19,7 +19,7 @@ class Categories(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     passcheck = models.CharField(max_length= 30,default= 0)
-    contact  = models.CharField(max_length=30)
+    contact = models.CharField(max_length=30)
 
     def __unicode__(self):
          return '%s' % (self.user)
@@ -41,10 +41,11 @@ class Softwares(models.Model):
 class Purchases(models.Model):
     curruser = models.ForeignKey(UserProfile)
     softwareinfo = models.ForeignKey(Softwares)
+    categoryinfo = models.ForeignKey(Categories)
     macid1 = models.CharField(default=0, max_length=50)
     macid2 = models.CharField(default=0, max_length=50)
     macid3 = models.CharField(default=0, max_length=50)
     maccount = models.IntegerField(default=0)
-
+    purchasetime = models.DateField(auto_now_add=True)
     def __unicode__(self):
         return self.curruser.user.first_name

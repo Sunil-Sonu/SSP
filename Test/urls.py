@@ -33,8 +33,11 @@ urlpatterns = [
     url(r'^homepage/categories/(?P<pk>[0-9]+)/$',views.products,name = 'products'),
     url(r'^homepage/categories/products/(?P<pk>[0-9]+)/$', views.singleproduct, name = 'singleproduct'),
     url(r'^homepage/categories/products/productpurchased/(?P<pk>[0-9]+)/$',views.softwarepurchased,name = 'softwarepurchase'),
-    url(r'homepage/mysoftwares',views.mysoftwares,name='mysoftwares'),
-    url(r'homepage/allsoftwares',views.allsoftwares,name='allsoftwares')
+    url(r'homepage/mysoftwares/$',views.mysoftwares,name='mysoftwares'),
+    url(r'homepage/softwares/$',views.allsoftwares,name='allsoftwares'),
+    url(r'homepage/categories/products/(?P<pk>[0-9]+)/downloadjar/$',views.macverficationdownload,name = 'downloadjar'),
+    url(r'homepage/search/$', views.searchfile, name='search')
+
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
